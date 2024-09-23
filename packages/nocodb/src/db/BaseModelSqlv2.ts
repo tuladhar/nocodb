@@ -5693,7 +5693,7 @@ class BaseModelSqlv2 {
       trx?: any;
     } = {},
   ) {
-    const transaction = trx ?? (await this.dbDriver.transaction());
+    let transaction;
     try {
       const columns = await this.model.getColumns(this.context);
 
@@ -5703,6 +5703,8 @@ class BaseModelSqlv2 {
           await this.validate(d, columns);
         }
       }
+
+      transaction = trx ?? (await this.dbDriver.transaction());
 
       const updateDatas = raw
         ? datas
