@@ -5693,7 +5693,7 @@ class BaseModelSqlv2 {
       trx?: any;
     } = {},
   ) {
-    let transaction;
+    const transaction = trx ?? (await this.dbDriver.transaction());
     try {
       const columns = await this.model.getColumns(this.context);
 
@@ -5802,8 +5802,6 @@ class BaseModelSqlv2 {
           );
         }
       }
-
-      transaction = trx ?? (await this.dbDriver.transaction());
 
       for (const o of toBeUpdated) {
         await transaction(this.tnPath).update(o.d).where(o.wherePk);
